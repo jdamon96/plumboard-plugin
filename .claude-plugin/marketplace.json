@@ -1,0 +1,16 @@
+{
+  "name": "plumboard-plugin",
+  "owner": {
+    "name": "Jack Damon"
+  },
+  "plugins": [
+    {
+      "name": "plumboard",
+      "description": "Task awareness and project management via the plum CLI. Auto-detects boards, injects task context, and provides slash commands for project status.",
+      "source": {
+        "source": "github",
+        "repo": "jdamon96/plumboard-plugin"
+      }
+    }
+  ]
+}
