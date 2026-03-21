@@ -1,6 +1,12 @@
-# PlumBoard Plugin for Claude Code
+# PlumBoard Plugin
 
-Give Claude task awareness in any project. When installed, Claude knows to check PlumBoard when you ask about to-dos, tasks, or project progress.
+Task awareness and project management for AI coding tools.
+
+| Tool | Status |
+|------|--------|
+| Claude Code | Supported |
+| Cursor | Planned |
+| OpenAI Codex | Planned |
 
 ## Install
 
@@ -51,4 +57,3 @@ npm run typecheck    # TypeScript check
 ## License
 
 MIT
-# plumboard-plugin

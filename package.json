@@ -1,0 +1,19 @@
+{
+  "name": "plumboard-plugin",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build:hooks": "tsup --config hooks/tsup.config.ts",
+    "build:manifest": "tsx scripts/build-manifest.ts",
+    "build": "npm run build:hooks && npm run build:manifest",
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "tsup": "^8.5.0",
+    "tsx": "^4.19.0",
+    "typescript": "^5.9.0",
+    "yaml": "^2.7.0"
+  }
+}

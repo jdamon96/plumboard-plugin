@@ -1,0 +1,128 @@
+{
+  "version": 2,
+  "generatedAt": "2026-03-21T18:15:54.601Z",
+  "skills": {
+    "plumboard-cli": {
+      "priority": 5,
+      "summary": "Guides usage of the PlumBoard CLI (plum) for managing Kanban boards, tasks, tags, comments, and members. Use when user asks to manage a PlumBoard board, create or move tasks, run plum commands, or asks about to-dos or project status.",
+      "docs": [
+        "https://github.com/jdamon96/plumboard"
+      ],
+      "bashPatterns": [
+        "^\\s*plum(?:\\s|$)",
+        "\\bplum\\s+task\\b",
+        "\\bplum\\s+board\\b",
+        "\\bplum\\s+comment\\b",
+        "\\bplum\\s+tag\\b",
+        "\\bplum\\s+member\\b",
+        "\\bplum\\s+auth\\b"
+      ],
+      "bashRegexSources": [
+        "^\\s*plum(?:\\s|$)",
+        "\\bplum\\s+task\\b",
+        "\\bplum\\s+board\\b",
+        "\\bplum\\s+comment\\b",
+        "\\bplum\\s+tag\\b",
+        "\\bplum\\s+member\\b",
+        "\\bplum\\s+auth\\b"
+      ],
+      "promptSignals": {
+        "phrases": [
+          "what are my to-dos",
+          "what are my todos",
+          "show my tasks",
+          "list tasks",
+          "task status",
+          "create a task",
+          "update task",
+          "move task",
+          "board status",
+          "plumboard",
+          "plum board",
+          "project progress",
+          "what should I work on",
+          "what's left to do",
+          "mark as done",
+          "assign task",
+          "add a to-do",
+          "check my board"
+        ],
+        "allOf": [
+          [
+            "task",
+            "list"
+          ],
+          [
+            "task",
+            "create"
+          ],
+          [
+            "task",
+            "status"
+          ],
+          [
+            "board",
+            "status"
+          ],
+          [
+            "task",
+            "done"
+          ],
+          [
+            "task",
+            "assign"
+          ]
+        ],
+        "anyOf": [
+          "task",
+          "todo",
+          "to-do",
+          "kanban",
+          "board",
+          "sprint",
+          "backlog"
+        ],
+        "noneOf": [
+          "jira",
+          "linear",
+          "asana",
+          "trello",
+          "github issues"
+        ],
+        "minScore": 6
+      },
+      "bodyPath": "skills/plumboard-cli/SKILL.md",
+      "retrieval": {
+        "aliases": [
+          "plumboard cli",
+          "plum command line",
+          "task management",
+          "kanban board cli"
+        ],
+        "intents": [
+          "list tasks",
+          "create task",
+          "move task status",
+          "check to-dos",
+          "manage board members",
+          "add comments to tasks",
+          "organize with tags"
+        ],
+        "entities": [
+          "plum CLI",
+          "plum task",
+          "plum board",
+          "plum tag",
+          "plum comment"
+        ],
+        "examples": [
+          "What are my to-dos?",
+          "Create a task for the auth bug",
+          "Move the design task to in-progress",
+          "Show me what's on the board",
+          "What should I work on next?"
+        ]
+      }
+    }
+  }
+}
