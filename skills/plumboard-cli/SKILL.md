@@ -91,42 +91,59 @@ PlumBoard is a Kanban board app. The `plum` CLI lets you manage boards, tasks, c
 
 ## Critical Rules
 
-1. **Always pass `-o json`** on every command. This gives structured JSON output with full UUIDs.
-2. **Always use full UUIDs** — never truncated 8-char IDs. The CLI rejects non-UUID strings.
-3. **Use `--force` on all delete commands** to skip interactive prompts that would hang.
-4. **Check auth first** before running any data commands.
+1. **For status / "what are my to-dos" questions, run `plum status -o json` FIRST.** It bundles auth, board context (auto-detected from `.plumboard.json`), and tasks grouped by status into one call. Skip `auth status` and `board list` — `status` does both.
+2. **Always pass `-o json`** on every command. This gives structured JSON output with full UUIDs.
+3. **Always use full UUIDs** — never truncated 8-char IDs. The CLI rejects non-UUID strings.
+4. **Use `--force` on all delete commands** to skip interactive prompts that would hang.
 5. **Use `--dry-run`** before destructive or high-stakes mutations to preview the payload.
+
+## One-Shot Status (preferred entry point)
+
+For "what are my to-dos", "what's on the board", "project status", or any read-only check:
+
+```bash
+plum status -o json
+```
+
+This single call returns:
+- Auth state (auto-refreshes an expired token; no separate `auth status` needed)
+- Board metadata (auto-detected from `.plumboard.json` in CWD or any parent directory)
+- Tasks grouped by status with per-status counts and an `assigned_to_me` count
+
+Filters: `--mine`, `--status todo,in-progress`, `--limit 10`, `--include-done`, `--board <uuid>` (override config).
+
+If the response has `ok: false`, the user needs to run `plum auth login` — surface that and stop.
+
+If `scope` is `"user"` (no `.plumboard.json` found and no `--board`), the response lists boards with summary counts only — drill in by re-running with `--board <uuid>`.
 
 ## Auth Setup
 
-Before any data commands, verify authentication:
+`plum status` handles auth implicitly. You only need to call `plum auth status -o json` directly when the user explicitly asks about their auth state.
 
 ```bash
 plum auth status -o json
+# {"logged_in": true, "email": "...", "user_id": "...", "token_valid": true, "refreshed": false}
 ```
 
-Expected success:
-```json
-{"logged_in": true, "email": "user@example.com", "user_id": "uuid-here", "token_valid": true}
-```
-
-If `logged_in` is false or `token_valid` is false, run:
+If `token_valid` is false (refresh also failed):
 ```bash
 plum auth login
 ```
-Note: `auth login` opens a browser for Google OAuth. This is interactive and cannot be fully automated.
+Note: `auth login` opens a browser for Google OAuth — interactive, cannot be fully automated.
 
 ## Core Workflow
 
-The typical order of operations:
+For mutations and detail drill-ins:
 
-1. **Authenticate** — `plum auth status -o json` / `plum auth login`
-2. **List or create a board** — `plum board list -o json` / `plum board create`
+1. **Read state** — `plum status -o json` (one call: auth + board + tasks)
+2. **Drill into a task** — `plum task get <TASK_ID> -o json`
 3. **Add tasks** — `plum task create --board <BOARD_ID> --title "..." -o json`
 4. **Move tasks through statuses** — `plum task move <TASK_ID> in-progress -o json`
 5. **Organize with tags** — `plum tag create` then `plum tag assign`
 6. **Collaborate** — `plum member add` to invite, `plum comment add` to discuss
 7. **Open in browser** — `plum open <BOARD_ID>` to view the board on the web
+
+The board ID for mutations comes from `plum status` (in `board.id`) or from `.plumboard.json` directly.
 
 ## Commands Reference
 
